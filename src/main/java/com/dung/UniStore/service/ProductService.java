@@ -18,6 +18,9 @@ import com.dung.UniStore.specification.ProductSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -38,15 +41,16 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id")
     public ProductResponse getProductById(int id) {
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED)
         );
-        ProductResponse productResponse =productMapper.toProductResponse(product);
-        return productResponse;
+        return  productMapper.toProductResponse(product);
     }
 
     @Override
+    @CachePut(value = "products", key = "#id")
     public ProductResponse updateProduct(int id, ProductUpdateRequest request) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED)
@@ -60,6 +64,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(int id) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED)

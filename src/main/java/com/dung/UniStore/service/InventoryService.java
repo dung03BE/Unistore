@@ -47,8 +47,7 @@ public class InventoryService implements IInventoryService {
             // Nếu mục inventory đã tồn tại, cộng thêm quantity
             existingInventoryItem.setQuantity(existingInventoryItem.getQuantity() + itemRequest.getQuantity());
             inventoryRepository.save(existingInventoryItem);
-            String redisQuantityStock = existingInventoryItem.getProductId() + "_quantity_stock";
-            redisTemplate.opsForValue().set(redisQuantityStock, existingInventoryItem.getQuantity());
+
             return existingInventoryItem;
         } else {
             // Nếu mục inventory chưa tồn tại, tạo mới
@@ -60,8 +59,7 @@ public class InventoryService implements IInventoryService {
             inventoryItem.setQuantity(itemRequest.getQuantity());
             inventoryItem.setProductId(itemRequest.getProduct_id());
             inventoryRepository.save(inventoryItem);
-            String redisQuantityStock = inventoryItem.getProductId() + "_quantity_stock";
-            redisTemplate.opsForValue().set(redisQuantityStock, itemRequest.getQuantity());
+
             return inventoryItem;
         }
     }

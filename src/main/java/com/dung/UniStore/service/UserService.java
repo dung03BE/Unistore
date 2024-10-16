@@ -11,6 +11,7 @@ import com.dung.UniStore.repository.IRoleRepository;
 import com.dung.UniStore.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -77,6 +78,7 @@ public class UserService {
     }
 //post hoox tro them laays đúng user dang login
     @PostAuthorize("returnObject.phoneNumber==authentication.name")
+    @Cacheable(value = "users", key = "#id")
     public User getUserById(int id) {
         log.info("In method get info");
         return userRepository.findById(id).get();
