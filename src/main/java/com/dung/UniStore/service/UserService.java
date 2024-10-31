@@ -71,7 +71,7 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')") // ktra admin trc khi vaof method
     //@PostAuthorize("hasRole('ADMIN')") //goi method r moi kiem tra admin
-    /// sẽ k hoạt động vì hasRole chỉ hd với Role k permission nen phải sd hasAuthority @PreAuthorize("hasRole('APPROVE_POST')")
+    /// sẽ k hoạt động vì hasRole chỉ hd với Role k permission nen phải sd hasAuthority @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<User> getAllUsers() {
         log.info("In method get info");
         return userRepository.findAll();

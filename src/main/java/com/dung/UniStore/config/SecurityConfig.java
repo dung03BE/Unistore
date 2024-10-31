@@ -40,10 +40,12 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
+                       // .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS_POST).permitAll()
                      //   .requestMatchers(HttpMethod.GET,"api/v1/users").hasAuthority("ROLE_ADMIN")
 //                        .anyRequest().authenticated()
-                        .anyRequest().permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()  // Cho phép truy cập đến API docs
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2->oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)
